@@ -1,48 +1,64 @@
+/**
+ * THIS FILE WAS AUTO-GENERATED.
+ * PLEASE DO NOT EDIT IT MANUALLY.
+ * ===============================
+ * IF YOU COPY THIS INTO AN ESLINT CONFIG, REMOVE THIS COMMENT BLOCK.
+ */
+
 import path from 'node:path';
 
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
-import { configs, plugins, rules } from 'eslint-config-airbnb-extended';
+import { configs, plugins } from 'eslint-config-airbnb-extended';
 import { rules as prettierConfigRules } from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
-import reactRefresh from 'eslint-plugin-react-refresh';
 
 const gitignorePath = path.resolve('.', '.gitignore');
 
 const jsConfig = defineConfig([
+  // ESLint recommended config
   {
     name: 'js/config',
     ...js.configs.recommended,
   },
+  // Stylistic plugin
   plugins.stylistic,
+  // Import X plugin
   plugins.importX,
+  // Airbnb base recommended config
   ...configs.base.recommended,
-  rules.base.importsStrict,
 ]);
 
 const reactConfig = defineConfig([
+  // React plugin
   plugins.react,
+  // React hooks plugin
   plugins.reactHooks,
+  // React JSX A11y plugin
   plugins.reactA11y,
+  // Airbnb React recommended config
   ...configs.react.recommended,
-  rules.react.strict,
 ]);
 
 const typescriptConfig = defineConfig([
+  // TypeScript ESLint plugin
   plugins.typescriptEslint,
+  // Airbnb base TypeScript config
   ...configs.base.typescript,
-  rules.typescript.typescriptEslintStrict,
+  // Airbnb React TypeScript config
   ...configs.react.typescript,
 ]);
 
 const prettierConfig = defineConfig([
+  // Prettier plugin
   {
     name: 'prettier/plugin/config',
     plugins: {
       prettier: prettierPlugin,
     },
   },
+  // Prettier config
   {
     name: 'prettier/config',
     rules: {
@@ -53,33 +69,14 @@ const prettierConfig = defineConfig([
 ]);
 
 export default defineConfig([
+  // Ignore files and folders listed in .gitignore
   includeIgnoreFile(gitignorePath),
+  // JavaScript config
   ...jsConfig,
+  // React config
   ...reactConfig,
+  // TypeScript config
   ...typescriptConfig,
+  // Prettier config
   ...prettierConfig,
-  reactRefresh.configs.vite,
-  {
-    name: 'project/overrides',
-    rules: {
-      // Not needed with React 17+ JSX transform
-      'react/react-in-jsx-scope': 'off',
-      // Named exports are preferred for tree-shaking and re-exports
-      'import-x/prefer-default-export': 'off',
-      // Too strict for React components — TS infers return types fine
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      // Vite serves files from public/ via absolute paths (e.g. /vite.svg)
-      'import-x/no-absolute-path': 'off',
-    },
-  },
-  {
-    name: 'project/shadcn-overrides',
-    files: ['src/components/ui/**/*.tsx'],
-    rules: {
-      // shadcn components use namespace imports and multi-exports by design
-      'import-x/no-namespace': 'off',
-      'react/require-default-props': 'off',
-      'react-refresh/only-export-components': 'off',
-    },
-  },
 ]);

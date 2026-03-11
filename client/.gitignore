@@ -1,3 +1,7 @@
+# Environment files (keep .env.example tracked)
+# .env   # .env IS version controlled!
+.env.*
+
 # Logs
 logs
 *.log
@@ -11,11 +15,6 @@ node_modules
 dist
 dist-ssr
 *.local
-
-# Environment files (keep .env.example tracked)
-.env
-.env.development
-.env.production
 
 # Editor directories and files
 .vscode/*
