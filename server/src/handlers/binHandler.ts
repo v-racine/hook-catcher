@@ -25,8 +25,6 @@ router.post("/", async (_req: Request, res: Response) => {
   }
 });
 
-export default router;
-
 router.get("/", async (_req: Request, res: Response) => {
   try {
     const bins = await getAllBins();
@@ -76,3 +74,5 @@ router.delete("/:binId", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to delete bin." });
   }
 });
+
+export default router;
