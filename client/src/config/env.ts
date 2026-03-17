@@ -16,7 +16,7 @@ const PREFIX = "VITE_APP_"
 const createEnv = () => {
   const EnvSchema = z.object({
     API_URL: z.string(),
-    APP_URL: z.string().optional().default("http://localhost:3000"),
+    APP_URL: z.string().optional().default(window.location.origin),
     // ENABLE_API_MOCKING: z
     //   .string()
     //   .refine((s) => s === 'true' || s === 'false')

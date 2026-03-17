@@ -1,6 +1,8 @@
 # Environment files (keep .env.example tracked)
 # .env   # .env IS version controlled!
 .env.*
+.env
+.env.production 
 
 # Logs
 logs
