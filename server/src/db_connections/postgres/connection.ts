@@ -1,18 +1,5 @@
 import { Client, ClientConfig } from "pg";
-
-// Default connection configuration
-const defaultConfig: ClientConfig = {
-  host: process.env.DB_HOST ?? "localhost",
-  port: Number(process.env.DB_PORT) || 5432,
-  database: process.env.DB_NAME ?? "hookcatcher",
-  user: process.env.DB_USER ?? "postgres",
-  password: process.env.DB_PASSWORD ?? "",
-  connectionTimeoutMillis: 5000,
-  ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : false, // todo: fix ssl settings for deployed app
-};
+import Config from "../../config";
 
 let client: Client | null = null;
 
@@ -26,6 +13,18 @@ async function connect(config: ClientConfig = {}): Promise<Client> {
     console.warn("Already connected to the PostgreSQL database.");
     return client;
   }
+
+  const appConfig = Config.getInstance();
+
+  const defaultConfig: ClientConfig = {
+    host: appConfig.dbHost,
+    port: appConfig.dbPort,
+    database: appConfig.dbName,
+    user: appConfig.dbUser,
+    password: appConfig.dbPassword,
+    connectionTimeoutMillis: 5000,
+    ssl: appConfig.isProduction ? { rejectUnauthorized: false } : false,
+  };
 
   client = new Client({ ...defaultConfig, ...config });
 

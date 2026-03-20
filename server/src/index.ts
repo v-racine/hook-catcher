@@ -1,10 +1,11 @@
 import "dotenv/config";
+import Config from "./config";
 import app from "./app";
 import wsManager from "./websockets/connectionManager";
 import http from "http";
 import { startScheduledCleanup } from "./cleanup/scheduledCleanup";
 
-const PORT = process.env.PORT || 3000;
+const { port } = Config.getInstance();
 
 const server = http.createServer(app);
 
@@ -12,8 +13,8 @@ wsManager.init(server);
 
 const cleanupTimer = startScheduledCleanup();
 
-server.listen(PORT, () => {
-  console.log(`HookCatcher server listening on port ${PORT}`);
+server.listen(port, () => {
+  console.log(`HookCatcher server listening on port ${port}`);
 });
 
 process.on("SIGTERM", () => {

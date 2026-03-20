@@ -1,4 +1,5 @@
 import { MongoClient, MongoClientOptions } from "mongodb";
+import Config from "../../config";
 
 // Default connection configuration
 const defaultConfig: MongoClientOptions = {
@@ -8,29 +9,24 @@ const defaultConfig: MongoClientOptions = {
   retryWrites: false,
 };
 
-const defaultUri: string = process.env.MONGO_URI ?? "mongodb://localhost:27017";
-
-const MONGO_DB_NAME = process.env.MONGO_DB_NAME ?? "hookcatcher";
 const MONGO_COLLECTION_NAME = "request_payloads";
 
 let client: MongoClient | null = null;
 
 /**
  * Connects to a MongoDB database using the provided or default configuration.
- * @param uri - Optional override for the MongoDB connection URI.
  * @param options - Optional overrides for the default client options.
  * @returns The connected MongoClient instance.
  */
-async function connect(
-  uri: string = defaultUri,
-  options: MongoClientOptions = {},
-): Promise<MongoClient> {
+async function connect(options: MongoClientOptions = {}): Promise<MongoClient> {
   if (client) {
     console.warn("Already connected to the MongoDB database.");
     return client;
   }
 
-  client = new MongoClient(uri, { ...defaultConfig, ...options });
+  const { mongoUri } = Config.getInstance();
+
+  client = new MongoClient(mongoUri, { ...defaultConfig, ...options });
 
   try {
     await client.connect();
@@ -63,4 +59,8 @@ async function disconnect(): Promise<void> {
   }
 }
 
-export default { connect, disconnect, MONGO_COLLECTION_NAME, MONGO_DB_NAME };
+function getDbName(): string {
+  return Config.getInstance().mongoDbName;
+}
+
+export default { connect, disconnect, MONGO_COLLECTION_NAME, getDbName };
