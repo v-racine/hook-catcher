@@ -1,5 +1,6 @@
 node_modules/
 .env
+mock/
 
 # Temporary files
 temp.json
